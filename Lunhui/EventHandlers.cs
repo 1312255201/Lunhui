@@ -47,6 +47,8 @@ namespace Lunhui
 		public static List<int> Canteatshit = new List<int>();
 		public static List<int> useing2 = new List<int>();
 		public static List<int> used2 = new List<int>();
+		private int classd;
+
 		public void ReloadConfig()
 		{
 			string[] pzx = { "SCPHealth", "SCPSecondOnce", "SCP106Health", "SCP049MaxHealth", "SCP0492MaxHealth", "SCP096MaxHealth", "SCP106MaxHealth", "SCP173MaxHealth", "SCP939MaxHealth", "SecondAddHealth" };
@@ -410,6 +412,21 @@ namespace Lunhui
 						{
 							ev.IsRoundEnded = true;
 							return;
+						}
+						else if(list.Contains(Team.CDP) && !list.Contains(Team.MTF) && !list.Contains(Team.RSC) && list.Contains(Team.SCP))
+						{
+							classd = 0;
+							foreach(Player player in Player.List)
+							{
+								if(player.Role == RoleType.ClassD && (!scpspsjdidq.Contains(player.Id)))
+								{
+									classd++;
+								}
+							}
+							if(classd == 0)
+							{
+								ev.IsRoundEnded = true;
+							}
 						}
 						if (!list.Contains(Team.SCP) && (list.Contains(Team.CDP) || list.Contains(Team.CHI) || list.Contains(Team.MTF) || list.Contains(Team.RSC)))
 						{
