@@ -1004,6 +1004,18 @@ namespace Lunhui
 
 		public void ConsoleCommand(SendingConsoleCommandEventArgs ev)
 		{
+			if(ev.Name == "bc")
+			{
+				if(ev.Arguments.Count >= 1)
+				{
+					string txt = "";
+					for (int i = 0; i < ev.Arguments.Count; i++)
+					{
+						txt += " "+ ev.Arguments[i];
+					}
+					Map.Broadcast(5,ev.Player.Nickname + ":"+txt)
+				}
+			}
 			if (ev.Name == "1")
 			{
 				bool flag5 = used2.Contains(ev.Player.ReferenceHub.queryProcessor.PlayerId);
