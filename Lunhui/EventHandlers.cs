@@ -1013,7 +1013,7 @@ namespace Lunhui
 					{
 						txt += " "+ ev.Arguments[i];
 					}
-					Map.Broadcast(5,ev.Player.Nickname + ":"+txt)
+					Map.Broadcast(5, ev.Player.Nickname + ":" + txt);
 				}
 			}
 			if (ev.Name == "1")
