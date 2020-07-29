@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs;
 using MEC;
@@ -48,6 +49,9 @@ namespace Lunhui
 		public static List<int> useing2 = new List<int>();
 		public static List<int> used2 = new List<int>();
 		private int classd;
+		private Player 李云龙;
+		private bool 李云龙yes;
+		private int 李云龙id;
 
 		public void ReloadConfig()
 		{
@@ -440,6 +444,13 @@ namespace Lunhui
 		}
 		public void OnPlayerDeath(DiedEventArgs ev)
 		{
+			if(ev.Target.Id == 李云龙id)
+			{
+				李云龙id = 0;
+				李云龙 = null;
+				李云龙yes = false;
+				ev.Target.RankName = "";
+			}
 			for (int j = 0; j < scp181idq.Count; j++)
 			{
 				int num2 = scp181idq[j];
@@ -1256,7 +1267,7 @@ namespace Lunhui
 													{
 														ev.Player.Broadcast(1, "<color=#ff9900>[2]美食界里我老八，今天吃个哈密瓜，往里倒点臭卤虾，万人称我美食家</color>");
 														ev.Player.Broadcast(1, "<color=#ff9900>[1]美食界里我老八，今天吃个哈密瓜，往里倒点臭卤虾，万人称我美食家</color>");
-														ev.Player.Broadcast(4, "<color=#ff9900>获得电磁炮配大机枪");
+														ev.Player.Broadcast(4, "<color=#ff9900>获得电磁炮配大机枪</color>");
 														ev.Player.ReferenceHub.inventory.AddNewItem(ItemType.MicroHID, -4.65664672E+11f, 0, 0, 0);
 														ev.Player.ReferenceHub.inventory.AddNewItem(ItemType.GunLogicer, -4.65664672E+11f, 0, 0, 0);
 													}
@@ -1638,7 +1649,26 @@ namespace Lunhui
 		}
 		public void OnTeamReSpawn(RespawningTeamEventArgs ev)
 		{
+			if(ev.NextKnownTeam == Respawning.SpawnableTeamType.ChaosInsurgency)
+			{
+				李云龙 = ev.Players[0];
+				李云龙.RankName = "李云龙";
+				李云龙id = 李云龙.Id;
+				李云龙yes = true;
+				李云龙.RankColor = "yellow";
+
+				Timing.RunCoroutine(lylsl());
+
+			}
 			Timing.RunCoroutine(DelayTeamRespawn(ev));
+		}
+		public IEnumerator<float> lylsl()
+		{
+			while(李云龙yes)
+			{
+				李云龙.AddItem(ItemType.GrenadeFrag);
+				yield return Timing.WaitForSeconds(5f);
+			}
 		}
 		public IEnumerator<float> makescp(int id, string type)
 		{
