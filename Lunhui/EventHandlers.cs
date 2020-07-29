@@ -441,6 +441,9 @@ namespace Lunhui
 		}
 		public void OnRoundEnd(RoundEndedEventArgs ev)
 		{
+			李云龙id = 0;
+			李云龙 = null;
+			李云龙yes = false;
 		}
 		public void OnPlayerDeath(DiedEventArgs ev)
 		{
@@ -450,6 +453,8 @@ namespace Lunhui
 				李云龙 = null;
 				李云龙yes = false;
 				ev.Target.RankName = "";
+				Timing.RunCoroutine(lylsl());
+
 			}
 			for (int j = 0; j < scp181idq.Count; j++)
 			{
@@ -1651,12 +1656,14 @@ namespace Lunhui
 		{
 			if(ev.NextKnownTeam == Respawning.SpawnableTeamType.ChaosInsurgency)
 			{
-				李云龙 = ev.Players[0];
-				李云龙.RankName = "李云龙";
-				李云龙id = 李云龙.Id;
-				李云龙yes = true;
-				李云龙.RankColor = "yellow";
-
+				if(李云龙yes == false)
+				{
+					李云龙 = ev.Players[0];
+					李云龙.RankName = "李云龙";
+					李云龙id = 李云龙.Id;
+					李云龙yes = true;
+					李云龙.RankColor = "yellow";
+				}
 				Timing.RunCoroutine(lylsl());
 
 			}
@@ -1667,13 +1674,30 @@ namespace Lunhui
 			while(李云龙yes)
 			{
 				李云龙.AddItem(ItemType.GrenadeFrag);
-				yield return Timing.WaitForSeconds(5f);
+				yield return Timing.WaitForSeconds(30f);
 			}
 		}
 		public IEnumerator<float> makescp(int id, string type)
 		{
 			yield return Timing.WaitForSeconds(0.1f);
 			Player eva = Player.Get(id);
+			if(type == "lyl" && eva!=null)
+			{
+				if (李云龙yes == false)
+				{
+					eva.ReferenceHub.characterClassManager.SetClassID(RoleType.ChaosInsurgency);
+					eva.ReferenceHub.serverRoles.SetText("李云龙");
+					eva.ReferenceHub.serverRoles.SetColor("yellow");
+					李云龙 = eva;
+					李云龙id = eva.Id;
+					李云龙yes = true;
+				}
+				else
+				{
+					Log.Info("不给你设置已经有李云龙了");
+				}
+				
+			}
 			if (type == "181" && eva != null)
 			{
 				eva.ReferenceHub.characterClassManager.SetClassID(RoleType.ClassD);
@@ -1792,7 +1816,7 @@ namespace Lunhui
 						return;
 					}
 					Timing.RunCoroutine(makescp(int.Parse(ev.Arguments[0]), ev.Arguments[1]));
-					ev.Sender.RemoteAdminMessage("[Info]后台已执行该命令，允许的参数：ysy lzr szsjd 181 szs b");
+					ev.Sender.RemoteAdminMessage("[Info]后台已执行该命令，允许的参数：ysy lzr szsjd 181 szs b lyl");
 					ev.IsAllowed = false;
 					return;
 				}
